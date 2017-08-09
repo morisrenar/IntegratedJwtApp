@@ -21,29 +21,29 @@ public class FacilityServicesController {
         return "Hello Facility Service";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/facility/{facilityId}/facilityServices")
+    @RequestMapping(method = RequestMethod.GET, value = "/facilities/{facilityId}/facilityServices")
     public List<FacilityServices> getAllFacilityServices(@PathVariable String facilityId) {
         return facilityServicesService.getAllFacilityServices(facilityId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/facility/{facilityId}/facilityServices/{facilityServiceId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/facilities/{facilityId}/facilityServices/{facilityServiceId}")
     public FacilityServices getFacilityService(@PathVariable String facilityId, @PathVariable String facilityServiceId) {
         return facilityServicesService.getFacilityService(facilityId, facilityServiceId);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/facility/{facilityId}/facilityServices")
+    @RequestMapping(method = RequestMethod.POST, value = "/facilities/{facilityId}/facilityServices")
     public void addFacilityServices(@RequestBody FacilityServices facilityServices, @PathVariable String facilityId) {
         facilityServices.setFacilities(new Facilities(facilityId, "", ""));
         facilityServicesService.addFacilityServices(facilityServices);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/facility/{facilityId}/facilityServices/{facilityServiceId}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/facilities/{facilityId}/facilityServices/{facilityServiceId}")
     public void updateFacilityServices(@RequestBody FacilityServices facilityServices, @PathVariable String facilityId) {
         facilityServices.setFacilities(new Facilities(facilityId, "", ""));
         facilityServicesService.updateFacilityServices(facilityServices);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/facility/{facilityId}/facilityServices/{facilityServiceId}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/facilities/{facilityId}/facilityServices/{facilityServiceId}")
     public void deleteFacilityServices(@PathVariable String facilityServiceId) {
         facilityServicesService.deleteFacilityServices(facilityServiceId);
     }
