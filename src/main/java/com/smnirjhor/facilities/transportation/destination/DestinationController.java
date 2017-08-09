@@ -16,7 +16,7 @@ public class DestinationController {
     DestinationService destinationService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/{facilityId}/destinations")
-    public List<Destination> getAllTransportationInfo(@PathVariable String facilityId) {
+    public List<Destination> getAllDestinations(@PathVariable String facilityId) {
         return destinationService.getAllDestinations(facilityId);
     }
 
