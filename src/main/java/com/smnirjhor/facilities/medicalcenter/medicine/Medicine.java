@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * Created by bmshamsnahid on 7/28/17.
+ * Created by smnirjhor on 7/28/17.
  */
 @Entity
 public class Medicine {

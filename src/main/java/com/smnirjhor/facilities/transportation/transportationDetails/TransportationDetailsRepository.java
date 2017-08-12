@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 /**
- * Created by nahid on 8/10/17.
+ * Created by smnirjhor on 8/10/17.
  */
 public interface TransportationDetailsRepository extends CrudRepository<TransportationDetails, String> {
     public List<TransportationDetails> findByFacilitiesFacilitiesId(String facilitiesId);

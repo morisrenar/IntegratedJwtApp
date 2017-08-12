@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by bmshamsnahid on 7/27/17.
+ * Created by smnirjhor on 7/27/17.
  */
 @RestController
 @RequestMapping("/ru/facilities")

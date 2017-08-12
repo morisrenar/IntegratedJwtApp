@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Created by nahid on 8/10/17.
+ * Created by smnirjhor on 8/10/17.
  */
 @Service
 public class EmergencyContactService {

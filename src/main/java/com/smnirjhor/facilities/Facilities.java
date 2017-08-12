@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * Created by bmshamsnahid on 7/24/17.
+ * Created by smnirjhor on 7/24/17.
  */
 @Entity
 public class Facilities {

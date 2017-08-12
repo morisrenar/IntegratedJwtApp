@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * Created by nahid on 8/10/17.
+ * Created by smnirjhor on 8/10/17.
  */
 @Entity
 public class Specialist {

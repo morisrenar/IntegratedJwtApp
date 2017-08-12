@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * Created by bmshamsnahid on 7/26/17.
+ * Created by smnirjhor on 7/26/17.
  */
 @Entity
 public class Academics {

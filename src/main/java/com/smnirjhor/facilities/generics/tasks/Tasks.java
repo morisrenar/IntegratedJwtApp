@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- * Created by bmshamsnahid on 7/26/17.
+ * Created by smnirjhor on 7/26/17.
  */
 @Entity
 public class Tasks {
