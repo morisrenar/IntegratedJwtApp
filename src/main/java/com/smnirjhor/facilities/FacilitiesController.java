@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Created by smnirjhor on 7/24/17.
  */
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/ru")
 public class FacilitiesController {
