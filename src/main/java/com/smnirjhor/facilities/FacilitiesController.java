@@ -9,7 +9,8 @@ import java.util.List;
 /**
  * Created by smnirjhor on 7/24/17.
  */
-@CrossOrigin(origins = "http://localhost:4200")
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/ru")
 public class FacilitiesController {
@@ -38,6 +39,8 @@ public class FacilitiesController {
         facilitiesService.addFacility(facilities);
     }
 
+
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(method = RequestMethod.PUT, value = "/facilities/{facilityId}")
     public void updateFacilities(@RequestBody Facilities facilities, @PathVariable String facilityId) {
         facilitiesService.updateFacility(facilities);

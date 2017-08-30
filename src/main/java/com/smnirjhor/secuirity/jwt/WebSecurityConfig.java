@@ -35,14 +35,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                /*.cors()
-                .and()*/
+                .cors()
+                .and()
                 .csrf().disable().authorizeRequests()
 
                 .antMatchers("/guest/**").permitAll()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers("/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/ru/facilities/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/ru/facilities/**").permitAll()
                 //.antMatchers("/user/**").hasRole(USER)
                 //.antMatchers("/admin/**").hasRole(ADMIN)
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
