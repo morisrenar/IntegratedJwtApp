@@ -216,7 +216,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/facilities-center/facilities-center.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-sm-9\">\n    <app-facilities-details *ngIf=\"selectedFacility\"\n                            (updatedFacilityEvent)=\"onUpdateFacilityEvent($event)\"\n                            (deletedFacilityEvent)=\"onDeleteFacilityEvent($event)\"\n                            [facility]=\"selectedFacility\"></app-facilities-details>\n  </div>\n  <div class=\"col-sm-3\">\n    <app-facilities-list (selectedFacility)=\"onSelectFacility($event)\" [facilities]=\"facilities\"></app-facilities-list>\n  </div>\n</div>\n"
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-9\">\n\n    <div *ngIf=\"!hideNewFacility\">\n      <h2>New Facility</h2>\n      <form #form=\"ngForm\" (ngSubmit)=\"onSubmitNewFacility(form.value)\" class=\"well\">\n        <div class=\"form-group\">\n          <label>Facility Name</label>\n          <input type=\"text\" class=\"form-control\" required name=\"facilitiesName\" ngModel>\n        </div>\n        <div class=\"form-group\">\n          <label>Facility Description</label>\n          <input type=\"text\" class=\"form-control\" required name=\"facilitiesInfo\" ngModel>\n        </div>\n        <button type=\"submit\" class=\"btn btn-success\">Create</button>\n      </form>\n    </div>\n\n    <app-facilities-details *ngIf=\"selectedFacility\"\n                            (updatedFacilityEvent)=\"onUpdateFacilityEvent($event)\"\n                            (deletedFacilityEvent)=\"onDeleteFacilityEvent($event)\"\n                            [facility]=\"selectedFacility\"></app-facilities-details>\n  </div>\n  <div class=\"col-sm-3\">\n    <button type=\"button\" (click)=\"onCreateFacility()\" class=\"btn btn-primary\"> + New Facility</button>\n    <app-facilities-list (selectedFacility)=\"onSelectFacility($event)\" [facilities]=\"facilities\"></app-facilities-list>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -241,6 +241,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var FacilitiesCenterComponent = (function () {
     function FacilitiesCenterComponent(facilitiesService) {
         this.facilitiesService = facilitiesService;
+        this.hideNewFacility = true;
         this.facilities = [];
     }
     FacilitiesCenterComponent.prototype.ngOnInit = function () {
@@ -259,6 +260,16 @@ var FacilitiesCenterComponent = (function () {
     };
     FacilitiesCenterComponent.prototype.onDeleteFacilityEvent = function (facility) {
         this.facilitiesService.deleteFacilities(facility).subscribe(function () { });
+    };
+    FacilitiesCenterComponent.prototype.onCreateFacility = function () {
+        this.hideNewFacility = !this.hideNewFacility;
+    };
+    FacilitiesCenterComponent.prototype.onSubmitNewFacility = function (facility) {
+        var _this = this;
+        facility.facilitiesId = "facilitiesId" + facility.facilitiesName + Math.floor((Math.random() * 100) + 1).toString() + "and" + Math.floor((Math.random() * 1000) + 3000).toString();
+        console.log("Creating facility");
+        console.log("Facilities : " + JSON.stringify(facility));
+        this.facilitiesService.createFacilities(facility).subscribe(function (resFacilities) { return _this.facilities = resFacilities; });
     };
     return FacilitiesCenterComponent;
 }());
@@ -297,7 +308,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/facilities-details/facilities-details.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div>\n  <form>\n    <div class=\"form-group\">\n      <input type=\"input\" class=\"form-control\" name=\"title\" required placeholder=\"title\"\n             [(ngModel)]=\"facility.facilitiesId\">\n    </div>\n    <div class=\"form-group\">\n      <input type=\"input\" class=\"form-control\" name=\"url\" required placeholder=\"url\"\n             [(ngModel)]=\"facility.facilitiesName\">\n    </div>\n    <div class=\"form-group\">\n      <textarea class=\"form-control\" rows=\"5\" name=\"desc\" [(ngModel)]=\"facility.facilitiesInfo\"></textarea>\n    </div>\n  </form>\n  <button type=\"button\" (click)=\"onUpdateFacility()\" class=\"btn btn-primary\">Update</button>\n  <button type=\"button\" (click)=\"onDeleteFacility()\" class=\"btn btn-danger\">Delete</button>\n</div>\n"
+module.exports = "<div>\n  <form>\n    <div class=\"form-group\">\n      <input type=\"input\" class=\"form-control\" name=\"title\" required placeholder=\"title\"\n             [(ngModel)]=\"facility.facilitiesId\">\n    </div>\n    <div class=\"form-group\">\n      <input type=\"input\" class=\"form-control\" name=\"url\" required placeholder=\"url\"\n             [(ngModel)]=\"facility.facilitiesName\">\n    </div>\n    <div class=\"form-group\">\n      <textarea class=\"form-control\" rows=\"5\" name=\"desc\" [(ngModel)]=\"facility.facilitiesInfo\"></textarea>\n    </div>\n  </form>\n\n  <button type=\"button\" (click)=\"onUpdateFacility()\" class=\"btn btn-primary\">Update</button>\n  <button type=\"button\" (click)=\"onDeleteFacility()\" class=\"btn btn-danger\">Delete</button>\n\n</div>\n"
 
 /***/ }),
 
@@ -412,6 +423,8 @@ var FacilitiesListComponent = (function () {
     };
     FacilitiesListComponent.prototype.onSelect = function (facility) {
         this.selectedFacility.emit(facility);
+    };
+    FacilitiesListComponent.prototype.onCreateFacility = function () {
     };
     return FacilitiesListComponent;
 }());
@@ -633,6 +646,7 @@ var FacilitiesService = (function () {
         this._getUrl = "http://localhost:8080/ru/facilities";
         this._putUrl = "http://localhost:8080/ru/facilities";
         this._deleteUrl = "http://localhost:8080/ru/facilities";
+        this._postUrl = "http://localhost:8080/ru/facilities";
     }
     FacilitiesService.prototype.getFacilities = function () {
         return this._http.get(this._getUrl)
@@ -655,6 +669,14 @@ var FacilitiesService = (function () {
         console.log("Deleting: " + facility);
         return this._http.delete(this._deleteUrl + "/" + facility.facilitiesId, options)
             .map(function (res) { });
+    };
+    FacilitiesService.prototype.createFacilities = function (facility) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ "Content-Type": "application/json" });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        return this._http.post(this._postUrl, JSON.stringify(facility), options)
+            .map(function (res) {
+            return res.json() || {};
+        });
     };
     return FacilitiesService;
 }());
