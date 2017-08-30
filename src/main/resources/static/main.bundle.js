@@ -216,7 +216,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/facilities-center/facilities-center.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-sm-9\">\n    <app-facilities-details *ngIf=\"selectedFacility\"\n                            (updatedFacilityEvent)=\"onUpdateFacilityEvent($event)\"\n                            (deletedFacilityEvent)=\"onDeleteVideoEvent($event)\"\n                            [facility]=\"selectedFacility\"></app-facilities-details>\n  </div>\n  <div class=\"col-sm-3\">\n    <app-facilities-list (selectedFacility)=\"onSelectFacility($event)\" [facilities]=\"facilities\"></app-facilities-list>\n  </div>\n</div>\n"
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-9\">\n    <app-facilities-details *ngIf=\"selectedFacility\"\n                            (updatedFacilityEvent)=\"onUpdateFacilityEvent($event)\"\n                            (deletedFacilityEvent)=\"onDeleteFacilityEvent($event)\"\n                            [facility]=\"selectedFacility\"></app-facilities-details>\n  </div>\n  <div class=\"col-sm-3\">\n    <app-facilities-list (selectedFacility)=\"onSelectFacility($event)\" [facilities]=\"facilities\"></app-facilities-list>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -241,6 +241,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var FacilitiesCenterComponent = (function () {
     function FacilitiesCenterComponent(facilitiesService) {
         this.facilitiesService = facilitiesService;
+        this.facilities = [];
     }
     FacilitiesCenterComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -256,7 +257,8 @@ var FacilitiesCenterComponent = (function () {
         console.log(facility);
         this.facilitiesService.updateFacilities(facility).subscribe(function (resFacilities) { return _this.facilities = resFacilities; });
     };
-    FacilitiesCenterComponent.prototype.onDeleteVideoEvent = function (facility) {
+    FacilitiesCenterComponent.prototype.onDeleteFacilityEvent = function (facility) {
+        this.facilitiesService.deleteFacilities(facility).subscribe(function () { });
     };
     return FacilitiesCenterComponent;
 }());
@@ -330,6 +332,7 @@ var FacilitiesDetailsComponent = (function () {
         this.updatedFacilityEvent.emit(this.facility);
     };
     FacilitiesDetailsComponent.prototype.onDeleteFacility = function () {
+        console.log("Delete method in facility details");
         this.deletedFacilityEvent.emit(this.facility);
     };
     return FacilitiesDetailsComponent;
@@ -629,6 +632,7 @@ var FacilitiesService = (function () {
         this._http = _http;
         this._getUrl = "http://localhost:8080/ru/facilities";
         this._putUrl = "http://localhost:8080/ru/facilities";
+        this._deleteUrl = "http://localhost:8080/ru/facilities";
     }
     FacilitiesService.prototype.getFacilities = function () {
         return this._http.get(this._getUrl)
@@ -638,12 +642,19 @@ var FacilitiesService = (function () {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ "Content-Type": "application/json" });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
         return this._http.put(this._putUrl + "/" + facility.facilitiesId, JSON.stringify(facility), options)
-            .map(this.extractData);
+            .map(function (res) {
+            return res.json() || {};
+        });
     };
-    FacilitiesService.prototype.extractData = function (res) {
-        var body = res.json();
-        console.log(body);
-        return body.data || {};
+    FacilitiesService.prototype.deleteFacilities = function (facility) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ "Content-Type": "application/json" });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
+            headers: headers,
+            body: facility
+        });
+        console.log("Deleting: " + facility);
+        return this._http.delete(this._deleteUrl + "/" + facility.facilitiesId, options)
+            .map(function (res) { });
     };
     return FacilitiesService;
 }());
