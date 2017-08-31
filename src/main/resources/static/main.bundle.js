@@ -525,21 +525,6 @@ var Facilities = (function () {
 
 /***/ }),
 
-/***/ "../../../../../src/app/model/user.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return User; });
-var User = (function () {
-    function User() {
-    }
-    return User;
-}());
-
-//# sourceMappingURL=user.js.map
-
-/***/ }),
-
 /***/ "../../../../../src/app/model/video.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -564,8 +549,6 @@ var Video = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("../../../http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__ = __webpack_require__("../../../../rxjs/add/operator/map.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__("../../../../rxjs/Observable.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -578,34 +561,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var AuthService = (function () {
     function AuthService(_http) {
         this._http = _http;
         this._postUrl = "http://localhost:8080/login";
     }
-    AuthService.prototype.makeAuth = function (userName, password) {
-        var authUser = {
-            "userName": userName,
-            "password": password
-        };
+    AuthService.prototype.makeAuth = function (user) {
         console.log("Post request to " + this._postUrl);
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ "Content-Type": "application/json" });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
-        return this._http.post(this._postUrl, JSON.stringify({
-            "username": "user1",
-            "password": "12345678"
-        }), options)
-            .map(this.extractData);
-    };
-    AuthService.prototype.extractData = function (res) {
-        var body = res.json();
-        console.log(body);
-        return body.data || {};
-    };
-    AuthService.prototype.handleError = function (error) {
-        console.error(error);
-        return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json().error || 'Server error');
+        return this._http.post(this._postUrl, JSON.stringify(user), options)
+            .map(function (res) { });
     };
     return AuthService;
 }());
@@ -647,36 +613,40 @@ var FacilitiesService = (function () {
         this._putUrl = "http://localhost:8080/ru/facilities";
         this._deleteUrl = "http://localhost:8080/ru/facilities";
         this._postUrl = "http://localhost:8080/ru/facilities";
+        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        this.token = this.currentUser.token;
+        this.headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({
+            "Content-Type": "application/json",
+            "Authorization": this.token
+        });
     }
+    FacilitiesService.prototype.createFacilities = function (facility) {
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: this.headers });
+        return this._http.post(this._postUrl, JSON.stringify(facility), options)
+            .map(function (res) {
+            return res.json() || {};
+        });
+    };
     FacilitiesService.prototype.getFacilities = function () {
-        return this._http.get(this._getUrl)
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: this.headers });
+        return this._http.get(this._getUrl, options)
             .map(function (response) { return response.json(); });
     };
     FacilitiesService.prototype.updateFacilities = function (facility) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ "Content-Type": "application/json" });
-        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
+        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: this.headers });
         return this._http.put(this._putUrl + "/" + facility.facilitiesId, JSON.stringify(facility), options)
             .map(function (res) {
             return res.json() || {};
         });
     };
     FacilitiesService.prototype.deleteFacilities = function (facility) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ "Content-Type": "application/json" });
         var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({
-            headers: headers,
+            headers: this.headers,
             body: facility
         });
         console.log("Deleting: " + facility);
         return this._http.delete(this._deleteUrl + "/" + facility.facilitiesId, options)
             .map(function (res) { });
-    };
-    FacilitiesService.prototype.createFacilities = function (facility) {
-        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["a" /* Headers */]({ "Content-Type": "application/json" });
-        var options = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["d" /* RequestOptions */]({ headers: headers });
-        return this._http.post(this._postUrl, JSON.stringify(facility), options)
-            .map(function (res) {
-            return res.json() || {};
-        });
     };
     return FacilitiesService;
 }());
@@ -783,7 +753,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/sign-in/sign-in.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n\n  <form class=\"form-signin\">\n    <h2 class=\"form-signin-heading\">Please sign in</h2>\n      <div class=\"form-group\">\n        <input type=\"input\" class=\"form-control\" name=\"userName\" required placeholder=\"userName\"\n               [(ngModel)]=\"user.userName\">\n      </div>\n      <div class=\"form-group\">\n        <input type=\"input\" class=\"form-control\" name=\"password\" required placeholder=\"password\"\n               [(ngModel)]=\"user.password\">\n      </div>\n    <button class=\"btn btn-lg btn-primary btn-block\" (click)=\"onSignIn()\">Sign in</button>\n  </form>\n\n</div> <!-- /container -->\n"
+module.exports = "<div class=\"container\">\n\n  <form #form=\"ngForm\" (ngSubmit)=\"onSignIn(form.value)\" class=\"well\">\n    <div class=\"form-group\">\n      <label>User Name</label>\n      <input type=\"text\" class=\"form-control\" required name=\"userName\" ngModel>\n    </div>\n    <div class=\"form-group\">\n      <label>Password</label>\n      <input type=\"text\" class=\"form-control\" required name=\"password\" ngModel>\n    </div>\n    <button type=\"submit\" class=\"btn btn-success\">Create</button>\n  </form>\n\n  <div class=\"form-group\">\n    <label>Token</label>\n    <input type=\"text\" class=\"form-control\" required name=\"token\" [(ngModel)]=\"token\">\n  </div>\n\n</div> <!-- /container -->\n"
 
 /***/ }),
 
@@ -793,8 +763,7 @@ module.exports = "<div class=\"container\">\n\n  <form class=\"form-signin\">\n 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignInComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__model_user__ = __webpack_require__("../../../../../src/app/model/user.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_auth_service__ = __webpack_require__("../../../../../src/app/service/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__service_auth_service__ = __webpack_require__("../../../../../src/app/service/auth.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -806,17 +775,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
 var SignInComponent = (function () {
     function SignInComponent(authService) {
         this.authService = authService;
     }
     SignInComponent.prototype.ngOnInit = function () {
-        this.user = new __WEBPACK_IMPORTED_MODULE_1__model_user__["a" /* User */]();
     };
-    SignInComponent.prototype.onSignIn = function () {
-        this.authService.makeAuth(this.user.userName, this.user.password);
-        console.log(this.user);
+    SignInComponent.prototype.onSignIn = function (user) {
+        this.authService.makeAuth(user);
+        console.log(user);
+        localStorage.setItem('currentUser', JSON.stringify({ token: this.token, name: user.userName }));
     };
     return SignInComponent;
 }());
@@ -826,7 +794,7 @@ SignInComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/sign-in/sign-in.component.html"),
         styles: [__webpack_require__("../../../../../src/app/sign-in/sign-in.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__service_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__service_auth_service__["a" /* AuthService */]) === "function" && _a || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__service_auth_service__["a" /* AuthService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__service_auth_service__["a" /* AuthService */]) === "function" && _a || Object])
 ], SignInComponent);
 
 var _a;

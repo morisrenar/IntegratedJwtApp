@@ -41,9 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/guest/**").permitAll()
                 .antMatchers("/users/**").permitAll()
-                .antMatchers("/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/ru/facilities/**").permitAll()
-                .antMatchers(HttpMethod.PUT, "/ru/facilities/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/**").permitAll()
+                //.antMatchers(HttpMethod.GET, "/ru/facilities/**").permitAll()
+                //.antMatchers(HttpMethod.PUT, "/ru/facilities/**").permitAll()
                 //.antMatchers("/user/**").hasRole(USER)
                 //.antMatchers("/admin/**").hasRole(ADMIN)
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
@@ -71,8 +71,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
