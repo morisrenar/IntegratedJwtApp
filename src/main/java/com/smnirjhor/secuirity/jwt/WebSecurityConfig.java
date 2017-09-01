@@ -42,10 +42,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/guest/**").permitAll()
                 .antMatchers("/users/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/**").permitAll()
-                //.antMatchers(HttpMethod.GET, "/ru/facilities/**").permitAll()
-                //.antMatchers(HttpMethod.PUT, "/ru/facilities/**").permitAll()
+
+                .antMatchers(HttpMethod.GET, "/ru/facilities/**").permitAll()
+                .antMatchers(HttpMethod.PUT, "/ru/facilities/**").permitAll()
                 //.antMatchers("/user/**").hasRole(USER)
                 //.antMatchers("/admin/**").hasRole(ADMIN)
+
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
