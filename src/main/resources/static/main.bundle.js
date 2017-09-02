@@ -364,6 +364,21 @@ var FacilitiesCenterComponent = (function () {
                         "facilitiesName": "name 1",
                         "facilitiesInfo": "info 1"
                     }
+                }, {
+                    "facilitiesDirectorsId": "director id 2",
+                    "facilitiesDirectorsName": "director name 2",
+                    "facilitiesDirectorsEmail": "director name 2",
+                    "facilitiesDirectorsPhone": "director phone",
+                    "facilitiesDirectorsRoom": "director room",
+                    "facilitiesDirectorsInfo": "director info 2",
+                    "facilitiesDirectorsPosition": "director position",
+                    "facilitiesDirectorsPositionName": "director name",
+                    "facilitiesDirectorsEx1": "director extra information",
+                    "facilities": {
+                        "facilitiesId": "id 2",
+                        "facilitiesName": "name 1",
+                        "facilitiesInfo": "info 1"
+                    }
                 }];
         }
     }
@@ -829,26 +844,6 @@ var DirectorsCenterComponent = (function () {
         this.hideNewDirectors = true;
         this.directors = [];
         this.isEmbedded = JSON.parse(localStorage.getItem('isEmbedded'));
-        /*if(this.isEmbedded == true) {
-          this.directors = [];
-        } else {
-          this.directors = [{
-            "facilitiesDirectorsId": "director id 1",
-            "facilitiesDirectorsName": "director name",
-            "facilitiesDirectorsEmail": "director name",
-            "facilitiesDirectorsPhone": "director phone",
-            "facilitiesDirectorsRoom": "director room",
-            "facilitiesDirectorsInfo": "director info",
-            "facilitiesDirectorsPosition": "director position",
-            "facilitiesDirectorsPositionName": "director name",
-            "facilitiesDirectorsEx1": "director extra information",
-            "facilities": {
-              "facilitiesId": "id 1",
-              "facilitiesName": "name 1",
-              "facilitiesInfo": "info 1"
-            }
-          }];
-        }*/
     }
     DirectorsCenterComponent.prototype.ngOnInit = function () {
     };
@@ -864,18 +859,21 @@ var DirectorsCenterComponent = (function () {
     DirectorsCenterComponent.prototype.onDeleteDirectorsEvent = function (directors) {
         if (this.isEmbedded) {
             this.directorsService.deleteDirectors(this.facility, directors).subscribe(function () { });
+            this.directors.splice(this.directors.indexOf(directors), 1);
+            this.selectedDirectors = null;
         }
     };
     DirectorsCenterComponent.prototype.onCreateDirectors = function () {
-        if (this.isEmbedded == true) {
-            this.hideNewDirectors = !this.hideNewDirectors;
-        }
+        this.hideNewDirectors = !this.hideNewDirectors;
     };
     DirectorsCenterComponent.prototype.onSubmitNewDirectors = function (directors) {
         var _this = this;
         directors.facilitiesDirectorsId = this.facility.facilitiesName + "DirectorsId" + Math.floor((Math.random() * 100) + 1).toString() + "and" + Math.floor((Math.random() * 1000) + 3000).toString();
         if (this.isEmbedded == true) {
             this.directorsService.createDirectors(this.facility, directors).subscribe(function (resDirectors) { return _this.directors = resDirectors; });
+            this.hideNewDirectors = !this.hideNewDirectors;
+            this.selectedDirectors = directors;
+            this.directors.push(directors);
         }
     };
     return DirectorsCenterComponent;
