@@ -2356,7 +2356,8 @@ var DirectorsService = (function () {
             headers: this.headers,
             body: directors
         });
-        return this._http.delete(this._deleteUrl + +"/" + facility.facilitiesId + "/directors/" + directors.facilitiesDirectorsId, options)
+        var finalDeleteUrl = this._deleteUrl + "/" + facility.facilitiesId + "/directors/" + directors.facilitiesDirectorsId;
+        return this._http.delete(finalDeleteUrl, options)
             .map(function (res) { });
     };
     return DirectorsService;
