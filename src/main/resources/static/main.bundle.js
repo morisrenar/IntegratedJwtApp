@@ -376,7 +376,9 @@ var FacilitiesCenterComponent = (function () {
     FacilitiesCenterComponent.prototype.onSelectFacility = function (facility) {
         var _this = this;
         this.selectedFacility = facility;
-        this.directorsService.getDirectors(this.selectedFacility).subscribe(function (resDirectors) { return _this.directors = resDirectors; });
+        if (this.isEmbedded == true) {
+            this.directorsService.getDirectors(this.selectedFacility).subscribe(function (resDirectors) { return _this.directors = resDirectors; });
+        }
         this.newSelectedFacilityEvent.emit(this.selectedFacility);
     };
     FacilitiesCenterComponent.prototype.onUpdateFacilityEvent = function (facility) {
@@ -388,6 +390,8 @@ var FacilitiesCenterComponent = (function () {
     FacilitiesCenterComponent.prototype.onDeleteFacilityEvent = function (facility) {
         if (this.isEmbedded == true) {
             this.facilitiesService.deleteFacilities(facility).subscribe(function () { });
+            this.facilities.splice(this.facilities.indexOf(facility), 1);
+            this.selectedFacility = null;
         }
     };
     FacilitiesCenterComponent.prototype.onCreateFacility = function () {
@@ -400,6 +404,9 @@ var FacilitiesCenterComponent = (function () {
         facility.facilitiesId = "facilitiesId" + facility.facilitiesName + Math.floor((Math.random() * 100) + 1).toString() + "and" + Math.floor((Math.random() * 1000) + 3000).toString();
         if (this.isEmbedded == true) {
             this.facilitiesService.createFacilities(facility).subscribe(function (resFacilities) { return _this.facilities = resFacilities; });
+            this.hideNewFacility = !this.hideNewFacility;
+            this.selectedFacility = facility;
+            this.facilities.push(facility);
         }
     };
     return FacilitiesCenterComponent;
@@ -471,7 +478,6 @@ var FacilitiesDetailsComponent = (function () {
         this.deletedFacilityEvent = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["x" /* EventEmitter */]();
     }
     FacilitiesDetailsComponent.prototype.ngOnInit = function () {
-        console.log("in facility details :" + JSON.stringify(this.facility));
         this.isEditMode = false;
         localStorage.setItem('currentFacility', JSON.stringify(this.facility));
     };
@@ -845,10 +851,6 @@ var DirectorsCenterComponent = (function () {
         }*/
     }
     DirectorsCenterComponent.prototype.ngOnInit = function () {
-        console.log("Current facility in directors center: " + JSON.stringify(this.facility));
-        if (this.isEmbedded == true) {
-            //this.directorsService.getDirectors(this.facility).subscribe(resDirectors => this.directors = resDirectors);
-        }
     };
     DirectorsCenterComponent.prototype.onSelectDirectors = function (directors) {
         this.selectedDirectors = directors;
