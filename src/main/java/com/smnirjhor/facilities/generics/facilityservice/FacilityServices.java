@@ -15,17 +15,17 @@ public class FacilityServices {
     @Id
     private String facilityServicesId;
     private String facilityServicesName;
-    private String getFacilityServicesInfo;
+    private String facilityServicesInfo;
     @ManyToOne
     private Facilities facilities;
 
     public FacilityServices() {
     }
 
-    public FacilityServices(String facilityServicesId, String facilityServicesName, String getFacilityServicesInfo, Facilities facilities) {
+    public FacilityServices(String facilityServicesId, String facilityServicesName, String facilityServicesInfo, Facilities facilities) {
         this.facilityServicesId = facilityServicesId;
         this.facilityServicesName = facilityServicesName;
-        this.getFacilityServicesInfo = getFacilityServicesInfo;
+        this.facilityServicesInfo = facilityServicesInfo;
         this.facilities = facilities;
     }
 
@@ -45,12 +45,12 @@ public class FacilityServices {
         this.facilityServicesName = facilityServicesName;
     }
 
-    public String getGetFacilityServicesInfo() {
-        return getFacilityServicesInfo;
+    public String getFacilityServicesInfo() {
+        return facilityServicesInfo;
     }
 
-    public void setGetFacilityServicesInfo(String getFacilityServicesInfo) {
-        this.getFacilityServicesInfo = getFacilityServicesInfo;
+    public void setFacilityServicesInfo(String facilityServicesInfo) {
+        this.facilityServicesInfo = facilityServicesInfo;
     }
 
     public Facilities getFacilities() {
